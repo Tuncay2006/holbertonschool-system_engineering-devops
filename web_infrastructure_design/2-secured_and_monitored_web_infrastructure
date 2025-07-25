@@ -1,0 +1,66 @@
+Three Server Secured and Monitored Web Infrastructure Design for www.foobar.com
+-------------------------------------------------------------------------------
+
+1. Components:
+
+- 1 Load Balancer (HAProxy)
+  - Distributes traffic to backend servers using Round Robin algorithm.
+  - Terminates SSL (HTTPS) using an SSL certificate.
+
+- 2 Application Servers:
+  - Each has:
+    - Nginx Web Server
+    - Application Server
+    - Set of Application Files (Code base)
+    - MySQL Database (1 Primary, 1 Replica)
+
+- 3 Firewalls:
+  - One in front of the Load Balancer (filters external traffic).
+  - One in front of each Application Server (restricts internal access).
+
+- 1 SSL Certificate:
+  - Enables secure encrypted HTTPS traffic between users and Load Balancer.
+
+- 3 Monitoring Clients:
+  - Installed on each server (collect metrics and logs).
+  - Send data to external service (e.g., Sumo Logic or Prometheus).
+
+-------------------------------------------------------------------------------
+
+2. Explanation of Components:
+
+- Firewalls:
+  - Prevent unauthorized access to servers.
+  - Enforce rules for incoming/outgoing traffic.
+
+- HTTPS/SSL:
+  - Encrypts data in transit.
+  - Protects user credentials and sensitive data.
+
+- Monitoring:
+  - Collects logs, CPU usage, memory usage, and QPS (queries per second).
+  - Used for debugging, performance tracking, and alerts.
+  - Tools like Sumo Logic or Prometheus scrape or receive logs via agents.
+
+- Monitoring QPS:
+  - Use Nginx logs or MySQL performance schema.
+  - Set up alerts if QPS exceeds a threshold.
+
+-------------------------------------------------------------------------------
+
+3. Infrastructure Issues:
+
+- SSL Termination at Load Balancer:
+  - SSL is decrypted at the load balancer.
+  - Backend traffic is unencrypted unless re-encrypted, which is a security risk.
+
+- Single MySQL Primary Node:
+  - Only one node can accept writes.
+  - If the primary fails, manual failover or automation is needed.
+
+- All-in-One Servers:
+  - Each server runs Web + App + DB.
+  - Not scalable.
+  - Harder to isolate failures or scale parts independently.
+
+-------------------------------------------------------------------------------
