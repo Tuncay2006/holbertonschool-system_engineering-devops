@@ -1,0 +1,7 @@
+User --> DNS --> Web Server (Nginx) --> App Server --> Database
+                            |           (e.g. PHP)        (MySQL)
+                            |
+                            --> Application Files (HTML, PHP, etc.)
+
+Domain: www.foobar.com
+IP: 8.8.8.8
