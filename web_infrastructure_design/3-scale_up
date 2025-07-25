@@ -1,0 +1,59 @@
+3-scale_up: Scaled-Up Web Infrastructure Design
+--------------------------------------------------
+
+Infrastructure Overview:
+-------------------------
+This infrastructure is designed to scale the website www.foobar.com with improved availability and modularity. The system consists of:
+
+- 2 Load Balancers (HAProxy) configured as a cluster for high availability
+- 2 Web Servers (Nginx or Apache)
+- 2 Application Servers (Gunicorn, uWSGI, or similar)
+- 1 Database Server (MySQL/PostgreSQL)
+- 1 New Additional Server added for redundancy or further scaling
+
+Component Separation:
+-------------------------
+Each server in this architecture has a distinct role:
+
+1. **Web Server**:
+   - Handles HTTP(S) requests
+   - Serves static content
+   - Forwards dynamic requests to the Application Server
+
+2. **Application Server**:
+   - Hosts backend application logic (e.g., Python, PHP, Node.js)
+   - Processes user requests and interacts with the database
+
+3. **Database Server**:
+   - Centralized storage of persistent data
+   - Runs MySQL or PostgreSQL
+   - Accepts read and write operations from the application
+
+4. **Load Balancer (HAProxy)**:
+   - Distributes traffic between the two web servers
+   - In a cluster setup, one is active and the other on standby to ensure failover
+   - Balances HTTP(S) requests using round-robin or least-connections strategy
+
+5. **Additional Server**:
+   - Can be used for scaling application logic, caching, or future use like background jobs (e.g., Celery worker)
+   - Improves system elasticity and separation of concerns
+
+Why Each Component Is Added:
+-------------------------
+- **Additional Server**: Supports scaling the system horizontally or handles non-blocking asynchronous tasks.
+- **HAProxy Cluster**: Prevents single point of failure, ensuring the website remains available even if one balancer fails.
+- **Split Architecture**: Improves security, scalability, and maintainability. Each component can be optimized or upgraded independently.
+
+Application Server vs Web Server:
+-------------------------
+- **Web Server** (Nginx/Apache):
+  - Deals with client-side requests
+  - Efficiently serves static files (HTML, JS, CSS)
+  - Can reverse proxy to backend servers
+
+- **Application Server** (Gunicorn/uWSGI):
+  - Handles dynamic content (Python/Flask/Django apps, Node.js, etc.)
+  - Executes business logic and interacts with databases or APIs
+  - Doesn’t serve static content directly
+
+This design enables better scaling, resilience, and clean separation of concerns.
